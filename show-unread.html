@@ -1,30 +1,10 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="unread-badge.html">
 
 <dom-module id="show-unread" class="empty">
   <template>
     <style>
-      :host(.empty) {
-        display: none;
-      }
-
-      :host {
-        display: inline-block;
-        padding: .25em .4em;
-        font-size: 75%;
-        font-weight: 700;
-        line-height: 1;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: baseline;
-        border-radius: .25rem;
-        color: #fff;
-        background-color: #dc3545;
-      }
-      a {
-        text-decoration: none;
-        color: #fff;
-      }
     </style>
     <iron-ajax
         auto
@@ -34,7 +14,7 @@
         on-response="handleResponse"
         debounce-duration="300">
     </iron-ajax>
-    <a href="[[profileUrl]]">[[value]]</a>
+    <unread-badge id="badge" url=[[profileUrl]]></unread-badge>
   </template>
 
   <script>
@@ -50,27 +30,14 @@
       static get is() { return 'show-unread'; }
       static get properties() {
         return {
-          value: {
-            type: String,
-            value: '',
-            observer: '_valueChanged'
-          },
           profileUrl: {
             type: String,
             value: ''
           }
         };
       }
-      _valueChanged(newValue, oldValue) {
-        this.value = newValue;
-        if (newValue) {
-          this.classList.remove("empty");
-        } else {
-          this.classList.add("empty");
-        }
-      }
       handleResponse(e) {
-        this.value = e.detail.response.length;
+        this.$.badge.value = e.detail.response.length;
       }
     }
 

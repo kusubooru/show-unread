@@ -1,0 +1,67 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="unread-badge" class="empty">
+  <template>
+    <style>
+      :host(.empty) {
+        display: none;
+      }
+
+      :host {
+        display: inline-block;
+        padding: .25em .4em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25rem;
+        color: #fff;
+        background-color: #dc3545;
+      }
+      a {
+        text-decoration: none;
+        color: #fff;
+      }
+    </style>
+    <a href="[[url]]">[[value]]</a>
+  </template>
+
+  <script>
+    /**
+     * `unread-badge`
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class UnreadBadge extends Polymer.Element {
+      static get is() { return 'unread-badge'; }
+      static get properties() {
+        return {
+          value: {
+            type: String,
+            value: '',
+            observer: '_valueChanged'
+          },
+          url: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+      _valueChanged(newValue, oldValue) {
+        this.value = newValue;
+        if (newValue) {
+          this.classList.remove("empty");
+        } else {
+          this.classList.add("empty");
+        }
+      }
+    }
+
+    window.customElements.define(UnreadBadge.is, UnreadBadge);
+  </script>
+</dom-module>
