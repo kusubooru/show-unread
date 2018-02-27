@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>show-unread test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../show-unread.html">
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <show-unread></show-unread>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedValuePropertyTestFixture">
+      <template>
+        <show-unread value="4"></show-unread>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedProfileUrlPropertyTestFixture">
+      <template>
+        <show-unread profile-url="/user"></show-unread>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('show-unread', () => {
+
+        test('instantiating the element with default properties works', () => {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.value, '');
+          assert.equal(element.profileUrl, '');
+          assert.equal(element.className, 'empty');
+          const elementShadowRoot = element.shadowRoot;
+          const elementAnchor = elementShadowRoot.querySelector('a');
+          assert.equal(elementAnchor.innerHTML, '');
+          assert.equal(elementAnchor.href, '');
+        });
+
+        test('setting value property on the element works', () => {
+          // Create a test fixture
+          const element = fixture('ChangedValuePropertyTestFixture');
+          assert.equal(element.value, '4');
+          assert.equal(element.className, '');
+          const elementShadowRoot = element.shadowRoot;
+          const elementAnchor = elementShadowRoot.querySelector('a');
+          assert.equal(elementAnchor.innerHTML, '4');
+        });
+
+        test('setting profile-url property on the element works', () => {
+          const element = fixture('ChangedProfileUrlPropertyTestFixture');
+          assert.equal(element.profileUrl, '/user');
+          const elementShadowRoot = element.shadowRoot;
+          const elementAnchor = elementShadowRoot.querySelector('a');
+          // elementAnchor.href contains the full URL
+          assert.equal(elementAnchor.getAttribute('href'), '/user');
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

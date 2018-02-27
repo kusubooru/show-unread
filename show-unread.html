@@ -1,0 +1,79 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+
+<dom-module id="show-unread" class="empty">
+  <template>
+    <style>
+      :host(.empty) {
+        display: none;
+      }
+
+      :host {
+        display: inline-block;
+        padding: .25em .4em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25rem;
+        color: #fff;
+        background-color: #dc3545;
+      }
+      a {
+        text-decoration: none;
+        color: #fff;
+      }
+    </style>
+    <iron-ajax
+        auto
+        url="https://kusubooru.com/suggest/autocomplete"
+        params='{"q":"chun"}'
+        handle-as="json"
+        on-response="handleResponse"
+        debounce-duration="300">
+    </iron-ajax>
+    <a href="[[profileUrl]]">[[value]]</a>
+  </template>
+
+  <script>
+    /**
+     * `show-unread`
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ShowUnread extends Polymer.Element {
+      static get is() { return 'show-unread'; }
+      static get properties() {
+        return {
+          value: {
+            type: String,
+            value: '',
+            observer: '_valueChanged'
+          },
+          profileUrl: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+      _valueChanged(newValue, oldValue) {
+        this.value = newValue;
+        if (newValue) {
+          this.classList.remove("empty");
+        } else {
+          this.classList.add("empty");
+        }
+      }
+      handleResponse(e) {
+        this.value = e.detail.response.length;
+      }
+    }
+
+    window.customElements.define(ShowUnread.is, ShowUnread);
+  </script>
+</dom-module>
