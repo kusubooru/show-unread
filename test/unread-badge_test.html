@@ -25,24 +25,13 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedUrlPropertyTestFixture">
-      <template>
-        <unread-badge url="/user"></unread-badge>
-      </template>
-    </test-fixture>
-
     <script>
       suite('unread-badge', () => {
 
         test('instantiating the element with default properties works', () => {
           const element = fixture('BasicTestFixture');
           assert.equal(element.value, '');
-          assert.equal(element.url, '');
           assert.equal(element.className, 'empty');
-          const elementShadowRoot = element.shadowRoot;
-          const elementAnchor = elementShadowRoot.querySelector('a');
-          assert.equal(elementAnchor.innerHTML, '');
-          assert.equal(elementAnchor.href, '');
         });
 
         test('setting value property on the element works', () => {
@@ -50,18 +39,6 @@
           const element = fixture('ChangedValuePropertyTestFixture');
           assert.equal(element.value, '4');
           assert.equal(element.className, '');
-          const elementShadowRoot = element.shadowRoot;
-          const elementAnchor = elementShadowRoot.querySelector('a');
-          assert.equal(elementAnchor.innerHTML, '4');
-        });
-
-        test('setting url property on the element works', () => {
-          const element = fixture('ChangedUrlPropertyTestFixture');
-          assert.equal(element.url, '/user');
-          const elementShadowRoot = element.shadowRoot;
-          const elementAnchor = elementShadowRoot.querySelector('a');
-          // elementAnchor.href contains the full URL
-          assert.equal(elementAnchor.getAttribute('href'), '/user');
         });
 
       });

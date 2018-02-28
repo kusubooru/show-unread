@@ -19,6 +19,12 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="ChangedValuePropertyTestFixture">
+      <template>
+        <show-unread value="4"></show-unread>
+      </template>
+    </test-fixture>
+
     <test-fixture id="ChangedProfileUrlPropertyTestFixture">
       <template>
         <show-unread profile-url="/user"></show-unread>
@@ -31,17 +37,34 @@
         test('instantiating the element with default properties works', () => {
           const element = fixture('BasicTestFixture');
           assert.equal(element.profileUrl, '');
+          assert.equal(element.value, '');
+          assert.equal(element.className, 'empty');
           const elementShadowRoot = element.shadowRoot;
           const badge = elementShadowRoot.querySelector('unread-badge');
-          assert.equal(badge.url, '');
+          assert.equal(badge.value, '');
+          const elementAnchor = elementShadowRoot.querySelector('a');
+          assert.equal(elementAnchor.getAttribute('title'), null);
+        });
+
+        test('setting value property on the element works', () => {
+          // Create a test fixture
+          const element = fixture('ChangedValuePropertyTestFixture');
+          assert.equal(element.value, '4');
+          assert.equal(element.className, '');
+          const elementShadowRoot = element.shadowRoot;
+          const badge = elementShadowRoot.querySelector('unread-badge');
+          assert.equal(badge.value, '4');
+          const elementAnchor = elementShadowRoot.querySelector('a');
+          assert.equal(elementAnchor.getAttribute('title'), 'You have 4 unread private messages');
         });
 
         test('setting profile-url property on the element works', () => {
           const element = fixture('ChangedProfileUrlPropertyTestFixture');
           assert.equal(element.profileUrl, '/user');
           const elementShadowRoot = element.shadowRoot;
-          const badge = elementShadowRoot.querySelector('unread-badge');
-          assert.equal(badge.url, '/user');
+          const elementAnchor = elementShadowRoot.querySelector('a');
+          // elementAnchor.href contains the full URL
+          assert.equal(elementAnchor.getAttribute('href'), '/user');
         });
 
       });

@@ -5,16 +5,30 @@
 <dom-module id="show-unread" class="empty">
   <template>
     <style>
+      :host(.empty) {
+        display: none !important;
+      }
+
+      :host {
+        display: inline-block;
+      }
+
+      a {
+        text-decoration: none;
+        color: #fff !important;
+      }
     </style>
     <iron-ajax
         auto
-        url="https://kusubooru.com/suggest/autocomplete"
-        params='{"q":"chun"}'
+        url="/suggest/show-unread"
         handle-as="json"
         on-response="handleResponse"
+        on-error="handleError"
         debounce-duration="300">
     </iron-ajax>
-    <unread-badge id="badge" url=[[profileUrl]]></unread-badge>
+    <a id="profileLink" href=[[profileUrl]]>
+      <unread-badge id="badge" value="[[value]]"></unread-badge>
+    </a>
   </template>
 
   <script>
@@ -33,11 +47,31 @@
           profileUrl: {
             type: String,
             value: ''
+          },
+          value: {
+            type: String,
+            value: '',
+            observer: '_valueChanged'
           }
         };
       }
       handleResponse(e) {
-        this.$.badge.value = e.detail.response.length;
+        this.value = e.detail.response.unread;
+      }
+      handleError(e) {
+        this.value = undefined;
+      }
+      _valueChanged(newValue, oldValue) {
+        this.value = newValue;
+        if (newValue) {
+          this.classList.remove("empty");
+          var title = "You have " + newValue + " unread private message";
+          if (newValue > 1) { title += "s"; }
+          this.$.profileLink.setAttribute("title", title);
+        } else {
+          this.classList.add("empty");
+          this.$.profileLink.removeAttribute("title");
+        }
       }
     }
 
