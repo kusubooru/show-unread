@@ -1,6 +1,9 @@
 # \<show-unread\>
 
-A web component to show a user's unread private messages.
+A web component displaying the number of unread private messages of a user in a
+notification badge.
+
+![show-unread](doc/show-unread.png)
 
 ## Development
 
